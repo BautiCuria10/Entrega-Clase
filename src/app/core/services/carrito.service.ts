@@ -19,14 +19,27 @@ export class CarritoService {
   totalCarrito: number = 0;
 
   agregarProducto(producto:Producto, cantidad:number){
-    this.carrito.push({
-      producto: producto,
-      cantidad: cantidad
-    });
+    const index = this.carrito.findIndex(item => item.producto.id === producto.id);
+    if(index > -1) {
+      this.carrito[index].cantidad++; 
+    }
+    else {
+      this.carrito.push({
+        producto: producto,
+        cantidad: cantidad
+      });
+    }
     this.actualizarLocalstorage();
     this.calcularTotal();
   }
-
+  modificarCantidadProducto(idProducto:number, cantidadACambiar: number){
+    const index = this.carrito.findIndex(item => item.producto.id === idProducto);
+    if(index > -1) {
+      this.carrito[index].cantidad = cantidadACambiar; 
+    }
+    this.actualizarLocalstorage(); 
+    this.calcularTotal();
+  }
   eliminarProducto(id:number){
     this.carrito = this.carrito.filter(item => item.producto.id !== id);
     this.actualizarLocalstorage(); 
